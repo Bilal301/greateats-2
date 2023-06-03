@@ -21,8 +21,6 @@ if (isset($_POST['login'])) {
     }
     if (empty($nameErr) && empty($passErr)) {
       if (isset($_POST['login'])) {
-        // $sql = 'INSERT INTO users_temp (username,password)
-        // VALUES (:username,:password)';
         $sql = 'SELECT * FROM users_temp WHERE username=:username AND password=:password';
         $statement = $pdo->prepare($sql);
         $statement->bindValue(':username', $username);

@@ -5,7 +5,7 @@ session_start();
 if (isset($_POST['login'])) {
   require_once "./../../config/database.php";
   $username = $password = $email = $nameErr = $emailErr = $passErr = '';
-
+  $message = '';
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($_POST['username'])) {
@@ -19,20 +19,28 @@ if (isset($_POST['login'])) {
     } else {
       $password = md5($_POST['password']);
     }
+
+    if (!empty($_POST['admin'])) {
+      $role = 'admin';
+    } else {
+      $role = 'user';
+    }
+
     if (empty($nameErr) && empty($passErr)) {
       if (isset($_POST['login'])) {
-        $sql = 'INSERT INTO users_temp (username,password)
-         VALUES (:username,:password)';
+        $sql = 'INSERT INTO users_temp (username,password,role)
+         VALUES (:username,:password,:role)';
 
         $statement = $pdo->prepare($sql);
         $statement->bindValue(':username', $username);
         $statement->bindValue(':password', $password);
+        $statement->bindValue(':role', $role);
         $statement->execute();
 
 
-        header('location: ./../../manage-menu/main-menu.php');
+        $message = 'New user created';
       } else {
-        echo 'invalid credentials';
+        $message = 'An Error occured';
       }
     }
   }
@@ -48,6 +56,11 @@ if (isset($_POST['login'])) {
 
 
 <?php require_once "./../../partials/header.php" ?>
+<?php if (!empty($message)) : ?>
+  <div class="alert <?php echo ($message === 'New user created') ? 'alert-success' : 'alert-danger'; ?>" role="alert">
+    <?php echo $message; ?>
+  </div>
+<?php endif; ?>
 <div class=" container d-flex flex-column align-items-center">
   <img src="./../../assets/img/great-eats-logo.png" class="w-25 mt-5 mb-3" alt="">
   <h2>Add User</h2>
@@ -67,9 +80,16 @@ if (isset($_POST['login'])) {
         <?php echo $passErr; ?>
       </div>
     </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="admin" name="admin" id="admin">
+      <label class="form-check-label" for="admin">
+        Admin
+      </label>
+    </div>
 
-    <div class="mb-3 col-md-6">
-      <input type="submit" name="login" value="Login" class="btn btn-dark w-100">
+
+    <div class="mt-4 mb-3 col-md-6">
+      <input type="submit" name="login" value="Add User" class="btn btn-dark w-100">
     </div>
   </form>
 </div>

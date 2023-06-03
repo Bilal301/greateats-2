@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include_once './../config/database.php';
 
 $sql = "SELECT * FROM menu";
@@ -11,8 +11,12 @@ $items = $statement->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <?php include_once "./../partials/header.php" ?>
+<div class="alert alert-success" role="alert">
+  <?php echo $_SESSION['username'] . " is currently logged in." ?>
+</div>
 <h1 class="text-center mt-3">Main Menu</h1>
 <a href="create-item.php" class="btn btn-success ms-4">Create Item</a>
+<a href="./../logsys/user-login/logout.php" class="btn btn-warning float-end me-4">Logout</a>
 <table class="table mt-5 ms-2 me-2">
   <thead>
     <tr class="mt-4">
