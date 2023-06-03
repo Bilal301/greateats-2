@@ -1,22 +1,51 @@
 <?php
-require_once "./../../config/database.php";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $username = $_POST['username'];
-  $password =  $_POST['password'];
-  if (isset($_POST['login'])) {
-    $sql = 'SELECT * FROM users WHERE username=:username AND password=:password';
-    $statement = $pdo->prepare($sql);
-    $statement->bindValue(':username', $username);
-    $statement->bindValue(':password', $password);
-    $statement->execute();
+session_start();
 
-    $count = $statement->rowCount();
-    if ($count > 0) {
-      header('location: ./../../manage-menu/main-menu.php');
+if (isset($_POST['login'])) {
+  require_once "./../../config/database.php";
+  $username = $password = $email = $nameErr = $emailErr = $passErr = '';
+
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (empty($_POST['username'])) {
+      $nameErr = 'username is required';
+    } else {
+      $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    }
+
+    if (empty($_POST['password'])) {
+      $passErr = 'password is required';
+    } else {
+      $password = md5($_POST['password']);
+    }
+    if (empty($nameErr) && empty($passErr)) {
+      if (isset($_POST['login'])) {
+        // $sql = 'INSERT INTO users_temp (username,password)
+        // VALUES (:username,:password)';
+        $sql = 'SELECT * FROM users_temp WHERE username=:username AND password=:password';
+        $statement = $pdo->prepare($sql);
+        $statement->bindValue(':username', $username);
+        $statement->bindValue(':password', $password);
+        $statement->execute();
+
+        $count = $statement->rowCount();
+        if ($count > 0) {
+          $_SESSION['username'] = $username;
+          header('location: ./../../manage-menu/main-menu.php');
+        } else {
+          echo 'invalid credentials';
+        }
+      }
     }
   }
 }
+
+
+
+
+
+
 ?>
 
 
@@ -24,14 +53,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class=" container d-flex flex-column align-items-center">
   <img src="./../../assets/img/great-eats-logo.png" class="w-25 mt-5 mb-3" alt="">
   <h2>User Login</h2>
-  <form action="" method="POST" class="mt-4 w-75 admin-login">
+  <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" class="mt-4 w-75 admin-login">
     <div class="mb-3 col-md-6">
       <label for="username" class="form-label">User Name</label>
-      <input type="text" class=" form-control" id="username" name="username" placeholder="Enter your username">
+      <input type="text" class=" form-control <?php echo $nameErr ? 'is-invalid' : null ?>" id="username" name="username" placeholder="Enter your username">
+      <div class="invalid-feedback">
+        <?php echo $nameErr; ?>
+      </div>
     </div>
+
     <div class="mb-3 col-md-6">
       <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+      <input type="password" class="form-control <?php echo $passErr ? 'is-invalid' : null ?>" id="password" name="password" placeholder="Enter your password">
+      <div class="invalid-feedback">
+        <?php echo $passErr; ?>
+      </div>
     </div>
 
     <div class="mb-3 col-md-6">
