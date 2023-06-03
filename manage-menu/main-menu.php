@@ -1,4 +1,5 @@
 <?php
+
 include_once './../config/database.php';
 
 $sql = "SELECT * FROM menu";
@@ -11,7 +12,7 @@ $items = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 <?php include_once "./../partials/header.php" ?>
 <h1 class="text-center mt-3">Main Menu</h1>
-</body>
+<a href="create-item.php" class="btn btn-success ms-4">Create Item</a>
 <table class="table mt-5 ms-2 me-2">
   <thead>
     <tr class="mt-4">
@@ -41,12 +42,7 @@ $items = $statement->fetchAll(PDO::FETCH_ASSOC);
 
   </tbody>
 </table>
-
-
-
-
-
-
 </main>
+</body>
 
 </html>
