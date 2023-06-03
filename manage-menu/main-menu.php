@@ -31,8 +31,8 @@ $items = $statement->fetchAll(PDO::FETCH_ASSOC);
         <td><?php echo '$' . $item['price'] ?></td>
         <td>
           <a href="edit-item.php?id=<?php echo $item['id']; ?>" class="btn btn-danger">Edit</a>
-          <form class="form-delete-item" action="delete.php" method="post">
-            <input type="hidden" name="delete-item">
+          <form class="form-delete-item" action="delete-item.php" method="POST">
+            <input type="hidden" name="id" value="<?php echo $item['id']; ?>">
             <button class="btn btn-secondary" type="submit">Delete</button>
           </form>
         </td>
