@@ -6,31 +6,38 @@ $statement = $pdo->prepare($sql);
 $statement->execute();
 
 $items = $statement->fetchAll(PDO::FETCH_ASSOC);
-var_dump($items);
 
 ?>
 
 <?php include_once "./../partials/header.php" ?>
 <h1 class="text-center mt-3">Main Menu</h1>
 </body>
-<table class="table">
+<table class="table mt-5 ms-2 me-2">
   <thead>
-    <tr>
+    <tr class="mt-4">
       <th scope="col">Item no.</th>
       <th scope="col">Menu Item</th>
       <th scope="col">Description</th>
       <th scope="col">Price</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <?php foreach ($items as $i => $item) : ?>
+    <?php foreach ($items as $i => $item) : ?>
+      <tr>
         <th scope="row"><?php echo $i + 1 ?></th>
         <td><?php echo $item['title'] ?></td>
-        <td><?php $item['description'] ?></td>
-        <td><?php $item['price'] ?></td>
-      <?php endforeach; ?>
-    </tr>
+        <td class="col-4"><?php echo $item['description'] ?></td>
+        <td><?php echo '$' . $item['price'] ?></td>
+        <td>
+          <a href="edit-item.php?id=<?php echo $item['id']; ?>" class="btn btn-danger">Edit</a>
+          <form class="form-delete-item" action="delete.php" method="post">
+            <input type="hidden" name="delete-item">
+            <button class="btn btn-secondary" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    <?php endforeach; ?>
 
   </tbody>
 </table>

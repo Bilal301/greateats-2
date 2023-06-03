@@ -22,3 +22,7 @@
 .action-btn {
   display: inline-block;
 }
+
+.form-delete-item {
+  display: inline-block;
+}
