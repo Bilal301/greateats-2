@@ -16,6 +16,9 @@ $items = $statement->fetchAll(PDO::FETCH_ASSOC);
 </div>
 <h1 class="text-center mt-3">Main Menu</h1>
 <a href="create-item.php" class="btn btn-success ms-4">Create Item</a>
+<?php if ($_SESSION['role'] === 'admin') : ?>
+  <a href="./../logsys/user-login/admin-login.php" class="btn btn-info float-end me-4">Back to Admin login</a>
+<?php endif; ?>
 <a href="./../logsys/user-login/logout.php" class="btn btn-warning float-end me-4">Logout</a>
 <table class="table mt-5 ms-2 me-2">
   <thead>

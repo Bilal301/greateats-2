@@ -59,6 +59,7 @@ if (isset($_POST['login'])) {
 <div class="alert alert-success" role="alert">
   <?php echo $_SESSION['username'] . " is currently logged in." ?>
 </div>
+<a href="./admin-login.php" type="button" class="btn btn-info ms-4">Back to Admin login</a>
 <?php if (!empty($message)) : ?>
   <div class="alert <?php echo ($message === 'New user created') ? 'alert-success' : 'alert-danger'; ?>" role="alert">
     <?php echo $message; ?>

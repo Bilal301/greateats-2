@@ -33,9 +33,11 @@ if (isset($_POST['login'])) {
         if ($count > 0) {
           if ($role['role'] === 'admin') {
             $_SESSION['username'] = $username;
+            $_SESSION['role'] = $role['role'];
             header('location: ./admin-login.php');
           } else {
             $_SESSION['username'] = $username;
+            $_SESSION['role'] = $role['role'];
             header('location: ./../../manage-menu/main-menu.php');
           }
         } else {

@@ -11,6 +11,9 @@ $users = $statement->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <?php include_once "./../../partials/header.php"; ?>
+<div class="alert alert-success" role="alert">
+  <?php echo $_SESSION['username'] . " is currently logged in." ?>
+</div>
 <h1 class=" m-4">Admin Login</h1>
 <a href="./../../manage-menu/main-menu.php" class="btn btn-secondary ms-3">Go to Menu</a>
 <a href="./../../manage-menu/main-menu.php" class="btn btn-success ms-3">Create User</a>
