@@ -56,6 +56,9 @@ if (isset($_POST['login'])) {
 
 
 <?php require_once "./../../partials/header.php" ?>
+<div class="alert alert-success" role="alert">
+  <?php echo $_SESSION['username'] . " is currently logged in." ?>
+</div>
 <?php if (!empty($message)) : ?>
   <div class="alert <?php echo ($message === 'New user created') ? 'alert-success' : 'alert-danger'; ?>" role="alert">
     <?php echo $message; ?>

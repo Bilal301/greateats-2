@@ -27,10 +27,17 @@ if (isset($_POST['login'])) {
         $statement->bindValue(':password', $password);
         $statement->execute();
 
+        $role = $statement->fetch(PDO::FETCH_ASSOC);
+
         $count = $statement->rowCount();
         if ($count > 0) {
-          $_SESSION['username'] = $username;
-          header('location: ./../../manage-menu/main-menu.php');
+          if ($role['role'] === 'admin') {
+            $_SESSION['username'] = $username;
+            header('location: ./admin-login.php');
+          } else {
+            $_SESSION['username'] = $username;
+            header('location: ./../../manage-menu/main-menu.php');
+          }
         } else {
           echo 'invalid credentials';
         }
