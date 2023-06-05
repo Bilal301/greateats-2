@@ -41,7 +41,7 @@ $items = $statement->fetchAll(PDO::FETCH_ASSOC);
           <a href="edit-item.php?id=<?php echo $item['id']; ?>" class="btn btn-danger">Edit</a>
           <form class="form-delete-item" action="delete-item.php" method="POST">
             <input type="hidden" name="id" value="<?php echo $item['id']; ?>">
-            <button class="btn btn-secondary" type="submit">Delete</button>
+            <button onclick="confirm('Are you sure?')" class="btn btn-secondary" type="submit">Delete</button>
           </form>
         </td>
       </tr>

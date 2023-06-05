@@ -16,7 +16,7 @@ $users = $statement->fetchAll(PDO::FETCH_ASSOC);
 </div>
 <h1 class=" m-4">Admin Login</h1>
 <a href="./../../manage-menu/main-menu.php" class="btn btn-secondary ms-3">Go to Menu</a>
-<a href="./../../manage-menu/main-menu.php" class="btn btn-success ms-3">Create User</a>
+<a href="./users-setup.php" class="btn btn-success ms-3">Create User</a>
 <a href="./logout.php" class="btn btn-warning float-end me-3">Logout</a>
 
 <table class="table mt-5 ms-2 me-2">
@@ -37,7 +37,7 @@ $users = $statement->fetchAll(PDO::FETCH_ASSOC);
         <td>
           <form action="delete-user.php" method="post">
             <input type="hidden" name="id" value="<?php echo $user['id'] ?>">
-            <button type="submit" class="btn btn-danger">Delete User</button>
+            <button type="submit" class="btn btn-danger" onclick="confirm('Are you sure?')">Delete User</button>
           </form>
         </td>
       </tr>

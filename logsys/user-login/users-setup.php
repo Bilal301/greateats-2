@@ -39,8 +39,12 @@ if (isset($_POST['login'])) {
 
 
         $message = 'New user created';
+
+        header('Location: admin-login.php');
       } else {
         $message = 'An Error occured';
+
+        header('Location: admin-login.php');
       }
     }
   }

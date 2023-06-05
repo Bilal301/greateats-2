@@ -1,8 +1,14 @@
 <?php
+echo '<pre>';
+var_dump($_FILES);
+echo '</pre>';
+// exit;
+
 
 $title = $description = $price = "";
 $titleErr = $priceErr = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
   require_once "./../config/database.php";
   if (isset($_POST['create-item'])) {
     if (empty($_POST['title'])) {
@@ -22,8 +28,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($titleErr) && empty($priceErr)) {
-      $sql = 'INSERT INTO menu (title,description,price) VALUES (:title, :description, :price)';
+      $image = $_FILES['filename'] ?? null;
+      if ($image) {
+        move_uploaded_file($image['tmp_name'], 'test.jpg');
+      }
+      exit;
+
+
+      $sql = 'INSERT INTO menu (image,title,description,price) VALUES (:image,:title, :description, :price)';
       $statement = $pdo->prepare($sql);
+      $statement->bindValue(':image', '');
       $statement->bindValue(':title', $title);
       $statement->bindValue(':description', $description);
       $statement->bindValue(':price', $price);
@@ -33,12 +47,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
 }
+
+function randomStrings($n)
+{
+  $char = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  $str = '';
+
+  for ($i = 0; $i < $n; $i++) {
+    $str .= $char;
+  }
+  return $str;
+}
+
+
 ?>
 
 <?php include_once "./../partials/header.php" ?>
 <div class="mt-4 w-100 admin-login">
   <h1 class=" m-4">Create Item</h1>
-  <form class=" m-4 col-md-6" method="POST">
+  <form class=" m-4 col-md-6" method="POST" enctype="multipart/form-data">
+    <input type="file" class="form-control" id="myFile" name="filename">
+
     <div class="mb-3">
       <label for="title" class="form-label">Create Item</label>
       <input type="text" class="form-control <?php echo $titleErr ? 'is-invalid' : null ?>" id="title" name="title" value="<?php echo $title ?>">
