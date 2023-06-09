@@ -24,6 +24,7 @@ $items = $statement->fetchAll(PDO::FETCH_ASSOC);
   <thead>
     <tr class="mt-4">
       <th scope="col">Item no.</th>
+      <th scope="col">Item Image</th>
       <th scope="col">Menu Item</th>
       <th scope="col">Description</th>
       <th scope="col">Price</th>
@@ -34,6 +35,7 @@ $items = $statement->fetchAll(PDO::FETCH_ASSOC);
     <?php foreach ($items as $i => $item) : ?>
       <tr>
         <th scope="row"><?php echo $i + 1 ?></th>
+        <td><img style="width: 200px;" src="<?php echo $item['image'] ?>" </td>
         <td><?php echo $item['title'] ?></td>
         <td class="col-4"><?php echo $item['description'] ?></td>
         <td><?php echo '$' . $item['price'] ?></td>

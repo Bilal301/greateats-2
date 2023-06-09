@@ -26,3 +26,7 @@
 .form-delete-item {
   display: inline-block;
 }
+
+.thumb-img {
+  width: 50px;
+}

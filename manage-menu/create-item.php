@@ -1,9 +1,4 @@
 <?php
-echo '<pre>';
-var_dump($_FILES);
-echo '</pre>';
-// exit;
-
 
 $title = $description = $price = "";
 $titleErr = $priceErr = "";
@@ -26,18 +21,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
       $price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
     }
-
+    $imagesDir = './../assets/img/menu-images';
+    if (!is_dir($imagesDir)) {
+      mkdir($imagesDir);
+    }
+    $imagePath = "";
     if (empty($titleErr) && empty($priceErr)) {
       $image = $_FILES['filename'] ?? null;
-      if ($image) {
-        move_uploaded_file($image['tmp_name'], 'test.jpg');
+      if ($image && $image['tmp_name']) {
+        $imagePath = $imagesDir . "/" . randomStrings(8) . "/" . $image['name'];
+        mkdir(dirname($imagePath));
+
+        move_uploaded_file($image['tmp_name'], $imagePath);
       }
-      exit;
 
 
       $sql = 'INSERT INTO menu (image,title,description,price) VALUES (:image,:title, :description, :price)';
       $statement = $pdo->prepare($sql);
-      $statement->bindValue(':image', '');
+      $statement->bindValue(':image', $imagePath);
       $statement->bindValue(':title', $title);
       $statement->bindValue(':description', $description);
       $statement->bindValue(':price', $price);
@@ -54,7 +55,8 @@ function randomStrings($n)
   $str = '';
 
   for ($i = 0; $i < $n; $i++) {
-    $str .= $char;
+    $index = rand(0, strlen($char) - 1);
+    $str .= $char[$index];
   }
   return $str;
 }
