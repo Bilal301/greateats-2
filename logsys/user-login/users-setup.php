@@ -26,30 +26,42 @@ if (isset($_POST['login'])) {
       $role = 'user';
     }
 
-    if (empty($nameErr) && empty($passErr)) {
-      if (isset($_POST['login'])) {
-        $sql = 'INSERT INTO users_temp (username,password,role)
-         VALUES (:username,:password,:role)';
 
-        $statement = $pdo->prepare($sql);
-        $statement->bindValue(':username', $username);
-        $statement->bindValue(':password', $password);
-        $statement->bindValue(':role', $role);
-        $statement->execute();
-
-
-        $message = 'New user created';
-
-        header('Location: admin-login.php');
+    if (isset($_POST['login'])) {
+      $sql = "SELECT * FROM users_temp WHERE username=:username";
+      $statement = $pdo->prepare($sql);
+      $statement->bindValue(':username', $username);
+      $statement->execute();
+      $count = $statement->rowCount();
+      if ($count > 0) {
+        $nameErr = 'User already exist. Try choosing another username';
       } else {
-        $message = 'An Error occured';
+        if (empty($nameErr) && empty($passErr)) {
+          $sql = 'INSERT INTO users_temp (username,password,role)
+           VALUES (:username,:password,:role)';
 
-        header('Location: admin-login.php');
+          $statement = $pdo->prepare($sql);
+          $statement->bindValue(':username', $username);
+          $statement->bindValue(':password', $password);
+          $statement->bindValue(':role', $role);
+          $statement->execute();
+
+
+
+
+
+          $message = 'New user created';
+
+          header('Location: admin-login.php');
+        } else {
+          $message = 'An Error occured';
+
+          header('Location: admin-login.php');
+        }
       }
     }
   }
 }
-
 
 
 
